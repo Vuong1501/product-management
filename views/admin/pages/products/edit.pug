@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 block main 
     +alert-error(5000)
     +alert-success(5000)
@@ -22,24 +23,17 @@ block main
           required
           value=product.title
         )
-      //- div(class="form-group")
-      //-   label(for="product_category_id") Danh mục
-      //-   select(
-      //-     name="product_category_id"
-      //-     id="product_category_id"
-      //-     class="form-control"
-      //-   )
-      //-     option(value="") -- Chọn danh mục --
-      //-     if(records)
-      //-       +select-tree(records)
-      //- div(class="form-group form-check form-check-inline")
-      //-   input(
-      //-     type="radio"
-      //-     class="form-check-input"
-      //-     id="featured1"
-      //-     name="featured"
-      //-     value="1"
-      //-   )
+      div(class="form-group")
+        label(for="product_category_id") Danh mục 
+        select(
+          name="product_category_id"
+          id="product_category_id"
+          class="form-control"
+        )
+          option(value="") --Chọn danh mục --
+          if(category)
+            +select-tree(category, 1, product.product_category_id)
+      
       //-   label(for="featured1" class="form-check-label") Nổi bật
       //- div(class="form-group form-check form-check-inline")
       //-   input(
