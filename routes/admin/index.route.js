@@ -4,6 +4,7 @@ const productRoutes = require("./product.route");
 const productCategoryRoutes = require("./product-category.route");
 const roleRoutes = require("./role.route");
 const accountRoutes = require("./account.route");
+const authRoutes = require("./auth.route");
 
 
 
@@ -14,5 +15,6 @@ module.exports = (app) => { // chuyền app vào vì bên file index.js có bi�
     app.use(PATH_ADMIN + '/products-category', productCategoryRoutes);
     app.use(PATH_ADMIN + '/roles', roleRoutes);
     app.use(PATH_ADMIN + '/accounts', accountRoutes);
+    app.use(PATH_ADMIN + '/auth', authRoutes);
 
 }
