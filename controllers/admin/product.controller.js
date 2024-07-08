@@ -105,7 +105,11 @@ module.exports.changeMulti = async (req, res) => {
         case "delete-all":
             await Product.updateMany({ _id: { $in: ids } }, {
                 deleted: true,
-                deletedAt: new Date()
+                //deletedAt: new Date()
+                deletedBy: {
+                    account_id: res.locals.user.id,
+                    deletedAt: new Date()
+                }
             });
             req.flash("success", `Đã xóa thành công ${ids.length} sản phẩm`);
             break;
@@ -132,7 +136,11 @@ module.exports.deleteItem = async (req, res) => {
     // await Product.deleteOne({ _id: id }); chỗ này là xóa cứng
     await Product.updateOne({ _id: id }, {
         deleted: true,
-        deletedAt: new Date()
+        //deletedAt: new Date()
+        deletedBy: {
+            account_id: res.locals.user.id,
+            deletedAt: new Date()
+        }
     });// chỗ này là xóa mềm
     req.flash("success", `Đã xóa thành công sản phẩm`);
     res.redirect("back"); // để khi ấn vào hoạt động hoặc dừng hđ thì sẽ ở lại trang đó mà không bị nhảy sang trang khác
