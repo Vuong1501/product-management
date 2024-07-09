@@ -33,6 +33,14 @@ module.exports.create = async (req, res) => {
 };
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
+    // const permissions = res.locals.role.permissions;
+    // if(permissions.includes("prodcuts-category_create")){
+    //      cho đoạn code bên dưới vào đây
+    // } else {
+    //     return;
+    // }
+
+
     if (req.body.position == "") { // nếu gửi lên là chuỗi rỗng thì lấy vị trí hiện tại + thêm 1
         const count = await ProductCategory.countDocuments();
         req.body.position = count + 1;

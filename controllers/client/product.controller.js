@@ -1,6 +1,7 @@
 // tách trang này ra nếu bên product.route.js cần dùng đến thì import vào
 
 const Product = require("../../models/product.model");
+const productsHelper = require("../../helpers/products");
 // [GET] /products
 module.exports.index = async (req, res) => {
     const products = await Product.find({
@@ -8,11 +9,7 @@ module.exports.index = async (req, res) => {
         deleted: false
     }).sort({ position: "desc" });
 
-    const newProducts = products.map(item => {
-        item.priceNew = (item.price*(100-item.discountPercentage)/100).toFixed(0);
-
-        return item;
-    });
+    const newProducts = productsHelper.priceNewProduct(products);
     
     res.render("client/pages/products/index.pug", {
         pageTitle: "Danh sách sản phẩm",
