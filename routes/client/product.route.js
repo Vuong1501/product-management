@@ -8,5 +8,5 @@ router.get('/', controller.index);// chỉ cần / thôi vì đây là trang ch�
                                 //  từ hàm controller gọi đến hàm index
 router.get('/:slugCategory', controller.category);
 
-// router.get('/:slug', controller.detail);
+router.get('/detail/:slugProduct', controller.detail);
 module.exports = router; // phải export để những nơi khác có thể dùng, nơi nào cần dùng thì require("./product.route") vào là có thể dùng được
