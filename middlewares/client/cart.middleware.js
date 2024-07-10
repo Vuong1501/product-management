@@ -15,6 +15,13 @@ module.exports.cartId = async (req, res, next) => {
         });// để trong phần cookies có thêm key là cartId và value là id của giỏ hàng
     } else{
         //khi đã có giỏ hàng
+
+        const cart = await Cart.findOne({
+            _id: req.cookies.cartId // tìm ra giỏ hàng có id như người dùng gửi lên
+        });
+
+        cart.totalQuantity = cart.products.reduce((sum, item) => sum + item.quantity, 0);
+        res.locals.miniCart = cart; // lưu thành biến toàn cục để bên view có thể lấy được biến miniCart
     }
 
     next();
