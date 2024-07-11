@@ -98,3 +98,25 @@ module.exports.delete = async (req, res) => {
     req.flash("success", "Đã xóa sản phẩm khỏi giỏ hàng!");
     res.redirect("back");
 }
+
+
+// [GET] /cart/update/:productId/:quantity
+module.exports.update = async (req, res) => {
+
+    const cartId = req.cookies.cartId; // lấy ra giỏ hàng cần update
+    const productId = req.params.productId;
+    const quantity = req.params.quantity; // số lượng của sản phẩm cần update
+    
+    await Cart.updateOne(
+        {
+            _id: cartId, // trùng id của giỏ hàng
+            'products.product_id': productId // product là mảng product trong DB, product_id là id của sản phẩm đó, productId là số lượng sản phẩm người dùng gửi lên
+        },
+        { //update lại số lượng sau khi thêm
+            'products.$.quantity': quantity // cập nhật lại quantity trong giỏ hàng bằng cái quantity người dùng đã gửi lên(quantity thứ 2)
+        }
+    );
+
+    req.flash("success", "Đã cập nhật số lượng");
+    res.redirect("back");
+}

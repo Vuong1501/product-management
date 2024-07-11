@@ -9,4 +9,7 @@ router.post('/add/:productId', controller.addPost); // từ hàm controller gọ
 
 router.get('/delete/:productId', controller.delete);
 
+router.get('/update/:productId/:quantity', controller.update);
+
+
 module.exports = router; 
