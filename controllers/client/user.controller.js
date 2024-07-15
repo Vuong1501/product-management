@@ -31,7 +31,6 @@ module.exports.registerPost =  async (req, res) => {
     // sau khi tạo tài khoản xong sẽ đăng nhập luôn mà không cần phải qua bước đăng nhập
     res.cookie("tokenUser", user.tokenUser);
 
-    console.log(user);
 
     // chuyển hướng về trang chủ
     res.redirect("/");
@@ -76,3 +75,9 @@ module.exports.loginPost =  async (req, res) => {
     
     res.redirect("/");
 }
+
+// [GET] /user/logout
+module.exports.logout =  async (req, res) => { 
+    res.clearCookie("tokenUser");
+    res.redirect("/");
+};
