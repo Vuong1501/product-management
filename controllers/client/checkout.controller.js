@@ -87,3 +87,37 @@ module.exports.order = async (req, res) => {
     res.redirect(`/checkout/success/${order.id}`);
 
 }
+
+// [GET] /checkout/success/:orderId
+module.exports.success = async (req, res) => {
+
+    // console.log(req.params.orderId);
+
+    // lấy ra đơn hàng đã đặt
+    const order = await Order.findOne({
+        _id: req.params.orderId
+    });
+
+    // lặp qua từng phần tử trong mảng product
+    for (const product of order.products) {
+        // lấy ra thông tin của sản phẩm đó
+        const productInfo = await Product.findOne({
+            _id: product.product_id // product là phần tử trong mảng product nên khi product.product_id  sẽ lấy ra id của sản phẩm đó
+        }).select(" title thumbnail");
+        product.productInfo = productInfo; // add thêm 1 key productInfo vào object product, vì mỗi product là 1 object trong mảng products
+
+        // Tính ra giá mới của mỗi sản phẩm 
+        product.priceNew = productsHelper.priceNewProduct1(product);
+
+        // tổng giá của sản phẩm đó với số lượng là x
+        product.totalPrice = product.priceNew * product.quantity;
+    }
+
+    //Giá của tổng đơn hàng
+    order.totalPrice = order.products.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    res.render("client/pages/checkout/success", {
+        pageTitle: "Đặt hàng thành công",
+        order: order
+    });
+}

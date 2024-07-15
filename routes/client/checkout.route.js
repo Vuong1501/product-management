@@ -7,4 +7,6 @@ router.get('/', controller.index); // từ hàm controller gọi đến hàm ind
 
 router.post('/order', controller.order);
 
+router.get('/success/:orderId', controller.success);
+
 module.exports = router; 
