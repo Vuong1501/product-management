@@ -8,6 +8,7 @@ const productRoutes = require("./product.route");// cần nhúng file này vào 
 const searchRoutes = require("./search.route");
 const cartRoutes = require("./cart.route");
 const checkoutRoutes = require("./checkout.route");
+const userRoutes = require("./user.route");
 
 module.exports = (app) => { // chuyền app vào vì bên file index.js có biến app
 
@@ -23,4 +24,6 @@ module.exports = (app) => { // chuyền app vào vì bên file index.js có bi�
     app.use("/cart", cartRoutes );
 
     app.use("/checkout", checkoutRoutes );
+
+    app.use("/user", userRoutes );
 }
