@@ -2,6 +2,7 @@ const md5 = require("md5");
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
 const generateHelper = require("../../helpers/generate");
+const sendMailHelper = require("../../helpers/sendMail");
 
 
 // [GET] /user/register
@@ -118,6 +119,14 @@ module.exports.forgotPasswordPost =  async (req, res) => {
     await forgotPassword.save();
 
     //Việc 2: Gửi mã OTP qua email của user
+
+    const subject = `Mã OTP xác minh láy lại mật khẩu`;
+    const html = `
+        Mã OTP xác minh lấy lại mật khẩu là <b>${otp}</b> . 
+        Thời hạn sử dụng là 3 phút. Lưu ý không để lộ mã OTP ra ngoài
+    `;
+
+    sendMailHelper.sendMail(email, subject, html);
     
     res.redirect(`/user/password/otp?email=${email}`);
 }
@@ -139,10 +148,6 @@ module.exports.otpPasswordPost =  async (req, res) => {
     const email = req.body.email; // để email ở trên thanh url
     const otp = req.body.otp;
 
-    console.log({
-        email: email,
-        otp: otp
-    });
     const result = await ForgotPassword.findOne({
         email: email,
         otp: otp
@@ -164,3 +169,44 @@ module.exports.otpPasswordPost =  async (req, res) => {
 
     res.redirect("/user/password/reset");
 }
+
+
+// [GET] /user/password/reset
+module.exports.resetPassword =  async (req, res) => { 
+    res.render("client/pages/user/reset-password.pug", {
+        pageTitle: "Đổi mật khẩu"
+    });
+};
+
+// [POST] /user/password/reset
+// module.exports.resetPasswordPost =  async (req, res) => { 
+
+//     const password = req.body.password;
+//     const tokenUser = req.cookies.tokenUser;
+
+//     await User.updateOne({
+//         tokenUser: tokenUser // 2 cái giống nhau để biết là update lại mật khẩu cho tài khoản nào
+//     }, {
+//         password: md5(password)
+//     });
+
+//     res.redirect("/");
+// };
+module.exports.resetPasswordPost = async (req, res) => {
+    const password = req.body.password;
+    const tokenUser = req.cookies.tokenUser;
+  
+    try {
+        await User.updateOne(
+        {
+          tokenUser: tokenUser,
+        },
+        {
+          password: md5(password),
+        }
+      );
+        res.redirect("/");
+    } catch (error) {
+        console.log(error);
+    }
+  };
