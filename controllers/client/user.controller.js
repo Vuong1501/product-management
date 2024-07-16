@@ -179,19 +179,6 @@ module.exports.resetPassword =  async (req, res) => {
 };
 
 // [POST] /user/password/reset
-// module.exports.resetPasswordPost =  async (req, res) => { 
-
-//     const password = req.body.password;
-//     const tokenUser = req.cookies.tokenUser;
-
-//     await User.updateOne({
-//         tokenUser: tokenUser // 2 cái giống nhau để biết là update lại mật khẩu cho tài khoản nào
-//     }, {
-//         password: md5(password)
-//     });
-
-//     res.redirect("/");
-// };
 module.exports.resetPasswordPost = async (req, res) => {
     const password = req.body.password;
     const tokenUser = req.cookies.tokenUser;
@@ -210,3 +197,11 @@ module.exports.resetPasswordPost = async (req, res) => {
         console.log(error);
     }
   };
+
+
+// [GET] /user/info
+module.exports.info =  async (req, res) => { 
+    res.render("client/pages/user/info.pug", {
+        pageTitle: "Thông tin tài khoản",
+    });
+};

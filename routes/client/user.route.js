@@ -4,6 +4,8 @@ const router = express.Router();
 const controller = require("../../controllers/client/user.controller"); // import từ file tên là home.controller.js
 const validate = require("../../validates/client/user.validate");
 
+const authMiddlieware = require("../../middlewares/client/auth.middleware");
+
 // router.get('/', controller.index); // từ hàm controller gọi đến hàm index
 
 router.get("/register", controller.register);
@@ -28,5 +30,8 @@ router.get("/password/reset", controller.resetPassword);
 
 // router.post("/password/reset",validate.resetPasswordPost, controller.resetPasswordPost);
 router.post("/password/reset",validate.resetPasswordPost, controller.resetPasswordPost);
+
+router.get("/info", authMiddlieware.requireAuth, controller.info);
+
 
 module.exports = router; 
