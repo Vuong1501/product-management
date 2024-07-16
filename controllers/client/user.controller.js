@@ -1,5 +1,7 @@
 const md5 = require("md5");
 const User = require("../../models/user.model");
+const ForgotPassword = require("../../models/forgot-password.model");
+const generateHelper = require("../../helpers/generate");
 
 
 // [GET] /user/register
@@ -81,3 +83,84 @@ module.exports.logout =  async (req, res) => {
     res.clearCookie("tokenUser");
     res.redirect("/");
 };
+
+// [GET] /user/password/forgot
+module.exports.forgotPassword =  async (req, res) => {
+    res.render("client/pages/user/forgot-password.pug", {
+        pageTitle: "Quên mật khẩu",
+    });
+}
+
+// [POST] /user/password/forgot
+module.exports.forgotPasswordPost =  async (req, res) => {
+
+    const email = req.body.email;
+    const user = await User.findOne({
+        email: email,
+        deleted: false
+    });
+
+    if(!user){
+        req.flash("error", `Email không tồn tại`);
+        res.redirect("back");
+        return;
+    }
+
+    //Viêc 1: Tạo mã OTP và lưu vào DB, email vào collection forgot-pasword
+    const otp = generateHelper.generateRandomNumber(8);
+    const objectForgotPassword = {
+        email: email, // chính là email người ta truyền vào
+        otp: otp,
+        expireAt: Date.now()
+    };
+
+    const forgotPassword = new ForgotPassword(objectForgotPassword);
+    await forgotPassword.save();
+
+    //Việc 2: Gửi mã OTP qua email của user
+    
+    res.redirect(`/user/password/otp?email=${email}`);
+}
+
+// [GET] /user/password/otp
+module.exports.otpPassword =  async (req, res) => {
+
+    const email = req.query.email; // để email ở trên thanh url
+
+    res.render("client/pages/user/otp-password.pug", {
+        pageTitle: "Nhập mã otp",
+        email: email
+    });
+};
+
+// [POST] /user/password/otp
+module.exports.otpPasswordPost =  async (req, res) => {
+
+    const email = req.body.email; // để email ở trên thanh url
+    const otp = req.body.otp;
+
+    console.log({
+        email: email,
+        otp: otp
+    });
+    const result = await ForgotPassword.findOne({
+        email: email,
+        otp: otp
+    });
+
+    if(!result){
+        req.flash("error", `OTP không hợp lê!`);
+        res.redirect("back");
+        return;
+    }
+
+    const user = await User.findOne({
+        email: email
+    });
+
+    // để xác thực xem có đúng là người ta vừa gửi lên yêu cầu lấy lại mật khẩu không vì tokenUser là duy nhất
+    res.cookie("tokenUser", user.tokenUser);
+
+
+    res.redirect("/user/password/reset");
+}
