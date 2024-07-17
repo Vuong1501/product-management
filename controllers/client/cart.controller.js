@@ -41,13 +41,15 @@ module.exports.addPost = async (req, res) => {
     const productId = req.params.productId;
     const quantity = parseInt(req.body.quantity); //chuyển sang dạng Number để giống trong DB
 
+
     const cart = await Cart.findOne({
         _id: cartId
     });
 
+
     const existProductInCart = cart.products.find( item => item.product_id == productId) //productId là người dùng gửi lên, product_id là trong DB
 
-    if(existProductInCart){ // Nếu đã có sản phẩm đó teong giỏ hàng thì chỉ cần cập nhật sô lượng sản phẩm đó thôi
+    if(existProductInCart){ // Nếu đã có sản phẩm đó trong giỏ hàng thì chỉ cần cập nhật sô lượng sản phẩm đó thôi
         const newQuantity = quantity + existProductInCart.quantity; // số lượng mới bằng số lượng người ta gửi lên + với số lượng hiện có trong DB
 
         await Cart.updateOne(
@@ -58,12 +60,12 @@ module.exports.addPost = async (req, res) => {
             {//update lại số lượng sau khi thêm
                 'products.$.quantity': newQuantity
             }
-        )
+        );
     } else {
         const objectCart = {
             product_id: productId,
             quantity: quantity
-        }
+        };
     
         await Cart.updateOne(
             {
