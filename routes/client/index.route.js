@@ -1,6 +1,7 @@
 const categoryMiddleware = require("../../middlewares/client/category.middleware");
 const carrtMiddleware = require("../../middlewares/client/cart.middleware");
 const userMiddleware = require("../../middlewares/client/user.middleware");
+const settingMiddleware = require("../../middlewares/client/setting.middleware");
 
 
 
@@ -16,6 +17,7 @@ module.exports = (app) => { // chuyền app vào vì bên file index.js có bi�
     app.use(categoryMiddleware.category);
     app.use(carrtMiddleware.cartId);
     app.use(userMiddleware.infoUser);
+    app.use(settingMiddleware.settingGeneral);
 
     app.use('/', homeRoutes);
 
