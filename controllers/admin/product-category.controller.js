@@ -66,7 +66,6 @@ module.exports.edit = async (req, res) => {
             deleted: false
         });
 
-        console.log(records);
         const newRecords = createTreeHelper.tree(records);
 
         res.render("admin/pages/products-category/edit.pug", {

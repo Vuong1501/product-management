@@ -21,7 +21,6 @@ module.exports.index = async (req, res) => {
         });
         record.role = role;
     }
-    console.log(records);
     res.render("admin/pages/accounts/index.pug", {
         pageTitle: "Nhóm quyền",
         records: records
@@ -105,7 +104,6 @@ module.exports.editPatch = async (req, res) => {
         } else {
             delete req.body.password;
         }
-        console.log(req.body);
         await Account.updateOne({_id: id}, req.body);
         req.flash("success", "Cập nhật thành công !");
     }

@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("express-flash");
 const moment = require("moment");
+const http = require('http');
+const { Server } = require("socket.io");
 require("dotenv").config();
 
 const database = require("./config/database");
@@ -24,6 +26,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride("_method"));
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
+
+//Socket io
+const server = http.createServer(app);
+const io = new Server(server);
+io.on("connection", (socket) => {
+  console.log("a user connectiong", socket.id);
+});
+// global._io = io
+// End socket.io
 
 // App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;// để biến prefixAdmin này tồn tại ở tất cả các file pug
@@ -50,6 +61,6 @@ app.get("*", (req, res) => {
   });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
