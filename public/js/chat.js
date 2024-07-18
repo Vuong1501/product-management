@@ -14,3 +14,27 @@ if(formSendData){
 }
 
 // END CLIENT_SEND_MASSAGE
+
+
+// SERVER_RETURN_MESSAGE
+
+socket.on("SERVER_RETURN_MESSAGE", (data) => {
+    const myId = document.querySelector("[my-id]").getAttribute("my-id");
+    const body = document.querySelector(".chat .inner-body") // lấy ra thẻ body
+
+    let htmlFullName = "";
+    if(myId = data.userId){ // nếu là cùng 1 người thì sẽ ẩn tên
+        div.classList.add("inner-outgoing");//add thêm class inner-coming vào thể div đó
+    } else { // khác nhau sẽ hiện tên
+        div.classList.add("inner-incoming");//add thêm class inner-coming vào thể div đó
+    }
+    //add thêm 1 thẻ div
+    div.innerHTML = `
+        ${htmlFullName}
+        <div class="inner-content">${data.content}</div> 
+    `; // thêm 2 thẻ div vào trong thẻ div vừa thêm ở trên
+    body.appendChild(div);
+});
+
+
+// END SERVER_RETURN_MESSAGE
