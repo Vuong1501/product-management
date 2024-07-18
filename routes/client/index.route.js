@@ -2,6 +2,7 @@ const categoryMiddleware = require("../../middlewares/client/category.middleware
 const carrtMiddleware = require("../../middlewares/client/cart.middleware");
 const userMiddleware = require("../../middlewares/client/user.middleware");
 const settingMiddleware = require("../../middlewares/client/setting.middleware");
+const authMiddleware = require("../../middlewares/client/auth.middleware");
 
 
 
@@ -32,6 +33,6 @@ module.exports = (app) => { // chuyền app vào vì bên file index.js có bi�
 
     app.use("/user", userRoutes );
 
-    app.use("/chat", chatRoutes );
+    app.use("/chat", authMiddleware.requireAuth, chatRoutes );
 
 }
