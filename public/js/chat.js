@@ -38,7 +38,19 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         <div class="inner-content">${data.content}</div> 
     `; // thêm 2 thẻ div vào trong thẻ div vừa thêm ở trên
     body.appendChild(div);
+    body.scrollTop = body.scrollHeight; // để mỗi lần gửi tin nhắn thì tin nhắn sẽ ở dưới luôn mà không cần phải cuộn xuống
 });
 
 
 // END SERVER_RETURN_MESSAGE
+
+// Khi mới vào thì tin nhắn sẽ ở dưới cùng
+
+const bodyChat = document.querySelector(".chat .inner-body"); // lấy ra thẻ body chat
+if(bodyChat){
+    bodyChat.scrollTop = bodyChat.scrollHeight; // chiều cao đúng bằng chiều cao của khung chat
+}
+
+
+
+// Hết phần khi mới vào thì tin nhắn sẽ ở dưới cùng
