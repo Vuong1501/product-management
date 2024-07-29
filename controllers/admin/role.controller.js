@@ -7,7 +7,7 @@ const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
 
     let find = {
-        deleted: false
+        deleted: false // lấy ra danh sách nhóm quyền
     };
 
     const records = await Role.find(find);
@@ -29,7 +29,7 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/roles/create
 module.exports.createPost = async (req, res) => {
 
-    const record = new Role(req.body);
+    const record = new Role(req.body); //req.body sẽ nhận được 1 object từ form vừa gửi lên
     await record.save();
 
     res.redirect(`${systemConfig.prefixAdmin}/roles`);
@@ -94,7 +94,7 @@ module.exports.permissionsPatch = async (req, res) => {
     const permissions = JSON.parse(req.body.permissions);
 
     for (const item of permissions) {
-        await Role.updateOne({_id: item.id}, {permissions: item.permissions});
+        await Role.updateOne({_id: item.id}, {permissions: item.permissions}); // id là id của quyền đó
     }
 
     req.flash("success", "Cập nhật phân quyền thành công!");

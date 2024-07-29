@@ -1,3 +1,5 @@
+import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+
 // CLIENT_SEND_MESSAGE
 
 const formSendData = document.querySelector(".chat .inner-form");
@@ -51,6 +53,29 @@ if(bodyChat){
     bodyChat.scrollTop = bodyChat.scrollHeight; // chiều cao đúng bằng chiều cao của khung chat
 }
 
-
-
 // Hết phần khi mới vào thì tin nhắn sẽ ở dưới cùng
+
+//emoji-picker
+// Show icon
+const buttonIcon = document.querySelector(".button-icon"); 
+if (buttonIcon) {
+  const tooltip = document.querySelector(".tooltip");
+  Popper.createPopper(buttonIcon, tooltip);
+  buttonIcon.addEventListener("click", () => {
+    tooltip.classList.toggle("shown");
+  });
+}
+// insert icon
+const emojiPicker = document.querySelector("emoji-picker");
+if(emojiPicker){
+
+    const inputChat = document.querySelector(".chat .inner-form input[name='content']");//lấy ra ô tin nhắn để chèn được icon vào ô đó
+
+    emojiPicker.addEventListener("emoji-click", (event) => {
+        const icon = event.detail.unicode;
+        inputChat.value = inputChat.value + icon; // để khi đang nhắn tin mà chọn thêm icon thì không bị mất tin nhắn đang viết trước đó
+        
+    });
+}
+
+//end emoji-picker

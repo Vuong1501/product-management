@@ -13,13 +13,13 @@ module.exports.index = async (req, res) => {
         deleted: false
     };
 
-    const records = await Account.find(find).select("-password -token");
+    const records = await Account.find(find).select("-password -token");// lấy ra tất cả các tài khoản để in ra giao diện
     for (const record of records) {
         const role = await Role.findOne({
             _id: record.role_id,
             deleted: false
         });
-        record.role = role;
+        record.role = role; // add thêm 1 key là role để bên pug nhận được key role
     }
     res.render("admin/pages/accounts/index.pug", {
         pageTitle: "Nhóm quyền",
@@ -29,7 +29,7 @@ module.exports.index = async (req, res) => {
 
 // [GET] /admin/create
 module.exports.create = async (req, res) => {
-    const roles = await Role.find({
+    const roles = await Role.find({ // giao diện phân quyền ở trang thêm mới tài khoản
         deleted: false
     });
     res.render("admin/pages/accounts/create.pug", {
@@ -70,7 +70,7 @@ module.exports.edit = async (req, res) => {
     };
     try {
       const data = await Account.findOne(find);
-      const roles = await Role.find({
+      const roles = await Role.find({ // lấy ra role để cập nhật lại quyền cho tài khoản cần chỉnh sửa
         deleted: false,
       });
       res.render("admin/pages/accounts/edit", {
