@@ -8,23 +8,6 @@ const upload = new FileUploadWithPreview.FileUploadWithPreview(
     }
 );
   
-// const formDataSocket = document.querySelector(".chat .inner-form");
-// if (formDataSocket) {
-//     const contentMessage = formDataSocket.querySelector("input[name='content']");
-//     formDataSocket.addEventListener("submit", (e) => {
-//       e.preventDefault();
-//       const content = contentMessage.value;
-//       const images = upload.cachedFileArray || [];
-//       if (content || images.length > 0) {
-//         socket.emit("CLIENT_SEND_MESSAGE", {
-//           content: content,
-//           images: images,
-//         });
-//         contentMessage.value = "";
-//         upload.resetPreviewPanel();
-//       }
-//     });
-// }
 
 // CLIENT_SEND_MESSAGE
 
@@ -36,8 +19,12 @@ if(formSendData){
         const images = upload.cachedFileArray || [];
 
         if(content || images.length > 0){
-            socket.emit("CLIENT_SEND_MESSAGE", content) // gửi lên sự kiện tên là CLIENT_SEND_MESSAGE với nội dung là content
+            socket.emit("CLIENT_SEND_MESSAGE", {
+                content: content,
+                images: images
+            }); // gửi lên sự kiện tên là CLIENT_SEND_MESSAGE với nội dung là content
             e.target.elements.content.value = ""; // gán lại ô input sang rỗng
+            upload.resetPreviewPanel();
             socket.emit("CLIENT_SEND_TYPING", "hidden");
         }
     });
@@ -56,6 +43,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     const div = document.createElement("div");    //add thêm 1 thẻ div
 
     let htmlFullName = "";
+    let htmlContent = "";
+    let htmlImages = "";
 
     if(myId == data.userId){ // nếu là cùng 1 người thì sẽ ẩn tên
         div.classList.add("inner-outgoing");//add thêm class inner-coming vào thể div đó
@@ -64,9 +53,26 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
     }
 
+    if(data.content){
+        htmlContent = `
+            <div class="inner-content">${data.content}</div>
+        `;
+    }
+
+    if(data.images){
+        htmlImages += `<div class="inner-images">`;
+        for (const image of data.images) {
+            htmlImages += `
+                <img src="${image}">
+            `;
+        }
+        htmlImages = `</div>`;
+    }
+
     div.innerHTML = `
         ${htmlFullName}
-        <div class="inner-content">${data.content}</div> 
+        ${data.content}
+        ${data.images}
     `; // thêm 2 thẻ div vào trong thẻ div vừa thêm ở trên
     body.insertBefore(div, boxTyping);
     body.scrollTop = body.scrollHeight; // để mỗi lần gửi tin nhắn thì tin nhắn sẽ ở dưới luôn mà không cần phải cuộn xuống
