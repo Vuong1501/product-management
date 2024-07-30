@@ -66,7 +66,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
                 <img src="${image}">
             `;
         }
-        htmlImages = `</div>`;
+        htmlImages += `</div>`;
     }
 
     div.innerHTML = `
