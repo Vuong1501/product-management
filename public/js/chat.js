@@ -76,6 +76,14 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     `; // thêm 2 thẻ div vào trong thẻ div vừa thêm ở trên
     body.insertBefore(div, boxTyping);
     body.scrollTop = body.scrollHeight; // để mỗi lần gửi tin nhắn thì tin nhắn sẽ ở dưới luôn mà không cần phải cuộn xuống
+
+    //Preview images
+
+    const boxImages = div.querySelector(".inner-images");
+    if(boxImages){
+        const gallery = new Viewer(boxImages);
+    }
+    //End Preview images
 });
 
 
@@ -172,6 +180,14 @@ if(elementsListTyping){
     });
 }
 
-
-
 //END SERVER_RETURN_TYPING
+
+// Preview images
+
+const chatBody = document.querySelector(".chat .inner-body");
+
+if(chatBody){
+    const gallery = new Viewer(chatBody);
+}
+
+// end Preview images
