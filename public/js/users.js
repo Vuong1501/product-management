@@ -29,3 +29,20 @@ if(listBtnCancelFriend.length > 0){
 }
 
 //Hết phần chức năng hủy gửi yêu cầu kết bạn
+
+
+//Chức năng từ chối kết bạn
+
+const listBtnRefuseFriend = document.querySelectorAll("[btn-refuse-friend]");
+if(listBtnRefuseFriend.length > 0){
+    listBtnRefuseFriend.forEach(button => {
+        button.addEventListener("click", () => {
+            button.closest(".box-user").classList.add("refuse"); // closet dùng để lấy ra box cha và sau đó add thêm class refuse để khi ấn vào chữ xóa thì sẽ xóa
+            const userId = button.getAttribute("btn-refuse-friend"); // lấy ra thuộc tính của btn-add-friend tức là id của người gửi kết bạn
+
+            socket.emit("CLIENT_REFUSE_FRIEND", userId);//gửi lên server id của người mình vừa hủy kết bạn
+        });
+    });
+}
+
+//Hết phần chức năng từ chối kết bạn
