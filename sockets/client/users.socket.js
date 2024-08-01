@@ -113,5 +113,57 @@ module.exports = async (res) => {
             // console.log(userId); //id của A
         });
 
+        //NGƯỜI DÙNG CHẤP NHẬN YÊU CẦU KẾT BẠN
+        socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
+            const myUserId = res.locals.user.id;//đây là id của B
+
+            
+            // -Thêm userId của A vào listfriend của B
+            // xóa id của A trong accpetFriends của B
+            const existUserAinB = await User.findOne({
+                _id: myUserId, // tìm ra id của B trước
+                acceptFriends: userId // xóa đi id của A trong accept friend của B
+            });
+
+            if(existUserAinB){ // nếu tồn tại id của A trong accpetFriends thì mới xóa
+                await User.updateOne({
+                    _id: myUserId // vế 1 là điều kiện. Để tìm ra id của của B
+                }, {
+                    // vừa xóa vừa thêm
+                    $push: {
+                        friendList: {
+                            user_id: userId,// id của A
+                            room_chat_id: ""
+                        }
+                    },
+                    $pull: {acceptFriends: userId} // xóa id của A trong accept của B
+                });
+            }
+
+            // -Thêm userId của B vào listfriend của A
+            // xóa id của B trong requestFriends của A
+
+            const existUserBinA = await User.findOne({
+                _id: userId, // tìm ra id của A trước
+                requestFriends: myUserId // sau đó xem trong A đã tồn tại B chưa
+            });
+
+            if(existUserBinA){
+                await User.updateOne({
+                    _id: userId // vế 1 là điều kiện. Để tìm ra id của A
+                }, {
+                    $push: {
+                        friendList: {
+                            user_id: myUserId,// id của B
+                            room_chat_id: ""
+                        }
+                    },
+                    $pull: {requestFriends: myUserId} // xóa id của B trong request của A
+                });
+            }
+            // console.log(myUserId); // id của B
+            // console.log(userId); //id của A
+        });
+
     });
 }
