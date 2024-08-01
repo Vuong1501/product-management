@@ -39,3 +39,32 @@ module.exports.notFriend =  async (req, res) => {
         users: users
     });
 };
+
+
+//[GET]/users/not-friend
+module.exports.request = async (req, res) => {
+    
+    // Socket
+
+    usersSocket(res);
+
+    // End Socket
+
+    const userId = res.locals.user.id;// lấy ra id của người đã đăng nhập vào
+    const myUser = await User.findOne({
+        _id: userId
+    }); // Lấy ra thông tin của A
+
+    const requestFriends = myUser.requestFriends;//lấy ra những người mà A gửi kết bạn đi
+    const users = await User.find({
+        _id: {$in: requestFriends}, // lấy ra những người có trong danh sách mình đã gửi yêu cầu đi
+        status: "active",
+        deleted: false
+    }).select("id avatar fullName");
+    
+
+    res.render("client/pages/users/request.pug", {
+        pageTitle: "Lời mời đã gửi",
+        users: users
+    });
+};
