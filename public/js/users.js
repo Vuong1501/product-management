@@ -61,3 +61,18 @@ if(listBtnAcceptFriend.length > 0){
 }
 
 //Hết phần chức năng chấp nhận kết bạn
+
+
+// SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+
+socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
+    const badgeUsersAccept = document.querySelectorAll("[badge-users-accept]");
+
+    const userId = badgeUsersAccept.getAttribute("badge-users-accept");
+    if(userId == data.userId){// để kiểm tra xem có đúng là id của B không về chỉ trả về số lượng lời mời kết bạn cho B
+        badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
+    }
+    
+});
+
+// END SERVER_RETURN_LENGTH_ACCEPT_FRIEND

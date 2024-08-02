@@ -38,6 +38,19 @@ module.exports = async (res) => {
             }
             // console.log(myUserId); // id của A
             // console.log(userId); //id của B
+
+            // lấy độ dài acceptFriends của B để trả cho B
+            const infoUserB = await User.findOne({
+                _id: userId
+            });
+
+            const lengthAcceptFriends = infoUserB.acceptFriends.length;
+
+            //trả về client
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+                userId: userId, // chỉ tra về cho B
+                lengthAcceptFriends: lengthAcceptFriends
+            });
         });
 
         //NGƯỜI DÙNG HỦY GỬI YÊU CẦU KẾT BẠN
