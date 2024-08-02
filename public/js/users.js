@@ -141,6 +141,15 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
             socket.emit("CLIENT_REFUSE_FRIEND", userId);
       });
       // Hết Xóa lời mời kết bạn
+
+        const buttonAccept = newBoxUser.querySelector("[btn-accept-friend]");
+        buttonAccept.addEventListener("click", () => {
+            buttonAccept.closest(".box-user").classList.add("accepted");
+
+            const userId = buttonAccept.getAttribute("btn-accept-friend");
+
+            socket.emit("CLIENT_ACCEPT_FRIEND", userId);
+      });
     }
 });
 
