@@ -21,7 +21,6 @@ module.exports = async (res) => {
                 });
             }
 
-
             // Thêm được id của B vào request của A
 
             const existUserBinA = await User.findOne({
@@ -50,6 +49,16 @@ module.exports = async (res) => {
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
                 userId: userId, // chỉ tra về cho B
                 lengthAcceptFriends: lengthAcceptFriends
+            });
+
+            // lấy thông tin của A trả về cho B
+            const infoUserA = await User.findOne({
+                _id: myUserId, // id của A
+            }).select("id avatar fullName");
+
+            socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+                userId: userId, // chỉ tra về cho B
+                infoUserA: infoUserA
             });
         });
 
