@@ -67,8 +67,8 @@ if(listBtnAcceptFriend.length > 0){
 
 socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
     const badgeUsersAccept = document.querySelectorAll("[badge-users-accept]");
-
     const userId = badgeUsersAccept.getAttribute("badge-users-accept");
+
     if(userId == data.userId){// để kiểm tra xem có đúng là id của B không về chỉ trả về số lượng lời mời kết bạn cho B
         badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
     }
@@ -80,8 +80,10 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
 // SERVER_RETURN_INFO_ACCEPT_FRIEND
 
 socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+    //trang lời mời kết bạn
     const dataUsersAccept = document.querySelectorAll("[data-users-accept]");
-    const userId = dataUsersAccept.getAttribute("data-users-accept");
+    if(dataUsersAccept){
+        const userId = dataUsersAccept.getAttribute("data-users-accept");
 
     if(userId == data.userId){// để kiểm tra xem có đúng là id của B không về chỉ trả về số lượng lời mời kết bạn cho B
         //vẽ user ra giao diện
@@ -151,6 +153,24 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
             socket.emit("CLIENT_ACCEPT_FRIEND", userId);
       });
     }
+    }
+    //hết trang lời mời kết bạn
+
+    // Trang danh sách người dùng
+    const dataUsersNotFriend = document.querySelector("[data-users-not-friend]");
+    if(dataUsersNotFriend){
+        const userId = dataUsersNotFriend.getAttribute("data-users-not-friend");
+
+        if(userId == data.userId){
+            // xóa A khỏi danh sách của B
+            const boxUserRemove = dataUsersAccept.querySelector(`[user-id="${data.infoUserA._id}"]`);
+            if(boxUserRemove){
+                dataUsersNotFriend.removeChild(boxUserRemove);
+            }
+        }
+    }
+
+    // Hết trang danh sách người dùng
 });
 
 // END SERVER_RETURN_INFO_ACCEPT_FRIEND

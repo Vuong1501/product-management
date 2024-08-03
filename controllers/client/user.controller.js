@@ -50,7 +50,7 @@ module.exports.login =  async (req, res) => {
     });
 }
 
-// [POST] /user/login
+// [POST] /user/loginPost
 module.exports.loginPost =  async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -80,6 +80,10 @@ module.exports.loginPost =  async (req, res) => {
 
     res.cookie("tokenUser", user.tokenUser);
 
+    await User.updateOne({_id: user.id}, {
+        statusOnline: "online"
+    });
+
     // Lưu user_id vào collection cart
 
     await Cart.updateOne({
@@ -89,10 +93,15 @@ module.exports.loginPost =  async (req, res) => {
     });
     
     res.redirect("/");
+
 }
 
 // [GET] /user/logout
 module.exports.logout =  async (req, res) => { 
+
+    await User.updateOne({_id: res.locals.user.id}, {
+        statusOnline: "offline"
+    });
     res.clearCookie("tokenUser");
     res.redirect("/");
 };

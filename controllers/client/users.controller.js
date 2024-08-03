@@ -96,3 +96,32 @@ module.exports.accept = async (req, res) => {
         users: users
     });
 };
+
+//[GET]/users/friends
+module.exports.friends = async (req, res) => {
+    
+    // Socket
+
+    usersSocket(res);
+
+    // End Socket
+
+    const userId = res.locals.user.id;// lấy ra id của người đã đăng nhập vào
+    const myUser = await User.findOne({
+        _id: userId
+    }); // Lấy ra thông tin của người đã đăng nhập vào
+
+    const friendList = myUser.friendList;//lấy ra những danh sách bạn bè
+    const friendListId = friendList.map(item => item.user_id);// vì từ khóa in chỉ lấy ra String mà khi friendList là object nên chỉ lấy id của object
+    const users = await User.find({
+        _id: {$in: friendListId}, // lấy ra những người có trong danh sách  bạn bè
+        status: "active",
+        deleted: false
+    }).select("id avatar fullName statusOnline");
+    
+
+    res.render("client/pages/users/friends.pug", {
+        pageTitle: "Danh sách bạn bè",
+        users: users
+    });
+};
