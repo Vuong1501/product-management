@@ -80,7 +80,6 @@ module.exports = async (res) => {
                 });
             }
 
-
             // xóa id của B trong requestFriends của A
 
             const existUserBinA = await User.findOne({
@@ -109,6 +108,12 @@ module.exports = async (res) => {
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
                 userId: userId, // chỉ tra về cho B
                 lengthAcceptFriends: lengthAcceptFriends
+            });
+
+            //lấy id của A trả về cho B để B biết là A vừa hủy gửi yêu cầu
+            socket.broadcast.emit("SERVER_RETURN_USER_ID_CANCEL_FRIEND", {
+                userId: userId, // trả về Id của B để biết là A vừa hủy yêu cầu B
+                userIdA: myUserId // id của A
             });
         });
 
