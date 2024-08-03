@@ -83,6 +83,10 @@ module.exports.loginPost =  async (req, res) => {
     await User.updateOne({_id: user.id}, {
         statusOnline: "online"
     });
+    // khi đăng nhập thành công thì server sẽ trả về client socket tên là SERVER_RETURN_USER_ONLINE
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id);
+    });
 
     // Lưu user_id vào collection cart
 
@@ -101,6 +105,11 @@ module.exports.logout =  async (req, res) => {
 
     await User.updateOne({_id: res.locals.user.id}, {
         statusOnline: "offline"
+    });
+
+    // khi đăng xuất thì server sẽ trả về client socket tên là SERVER_RETURN_USER_OFFINE
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_OFFINE", res.locals.user.id);
     });
     res.clearCookie("tokenUser");
     res.redirect("/");

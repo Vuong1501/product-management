@@ -192,3 +192,31 @@ socket.on("SERVER_RETURN_USER_ID_CANCEL_FRIEND", (data) => {
 });
 
 // End SERVER_RETURN_USER_ID_CANCEL_FRIEND
+
+// SERVER_RETURN_USER_ONLINE
+
+socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
+    const dataUsersFriend = document.querySelector("[data-users-friend]");
+    if(dataUsersFriend){
+        const boxUser = dataUsersFriend.querySelector(`[user-id=${userId}]`);
+        if(boxUser){
+            boxUser.querySelector("[status]").setAttribute("satus", "online");// cập nhật lại thuộc tính thành online
+        }
+    }
+});
+
+// end SERVER_RETURN_USER_ONLINE
+
+// SERVER_RETURN_USER_OFFINE
+
+socket.on("SERVER_RETURN_USER_OFFINE", (userId) => {
+    const dataUsersFriend = document.querySelector("[data-users-friend]");
+    if(dataUsersFriend){
+        const boxUser = dataUsersFriend.querySelector(`[user-id=${userId}]`);
+        if(boxUser){
+            boxUser.querySelector("[status]").setAttribute("satus", "offline");// cập nhật lại thuộc tính thành offline
+        }
+    }
+});
+
+// End SERVER_RETURN_USER_OFFINE

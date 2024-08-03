@@ -91,8 +91,6 @@ module.exports.order = async (req, res) => {
 // [GET] /checkout/success/:orderId
 module.exports.success = async (req, res) => {
 
-    // console.log(req.params.orderId);
-
     // lấy ra đơn hàng đã đặt
     const order = await Order.findOne({
         _id: req.params.orderId

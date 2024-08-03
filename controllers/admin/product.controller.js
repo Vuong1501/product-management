@@ -222,7 +222,6 @@ module.exports.createPost = async (req, res) => {
 // [GET] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
     try {
-        //console.log(req.params.id);
         const find = {
             deleted: false,
             _id: req.params.id
@@ -275,13 +274,11 @@ module.exports.editPatch = async (req, res) => {
 // [GET] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
     try {
-        //console.log(req.params.id);
         const find = {
             deleted: false,
             _id: req.params.id
         };
         const product = await Product.findOne(find);
-        //console.log(product);
         res.render("admin/pages/products/detail", {
             pageTitle: product.title,
             product: product
