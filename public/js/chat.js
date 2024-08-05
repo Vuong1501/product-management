@@ -59,7 +59,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         `;
     }
 
-    if(data.images){
+    if(data.images.length > 0){
         htmlImages += `<div class="inner-images">`;
         for (const image of data.images) {
             htmlImages += `
@@ -71,8 +71,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
 
     div.innerHTML = `
         ${htmlFullName}
-        ${data.content}
-        ${data.images}
+        ${htmlContent}
+        ${htmlImages}
     `; // thêm 2 thẻ div vào trong thẻ div vừa thêm ở trên
     body.insertBefore(div, boxTyping);
     body.scrollTop = body.scrollHeight; // để mỗi lần gửi tin nhắn thì tin nhắn sẽ ở dưới luôn mà không cần phải cuộn xuống
